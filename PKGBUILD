@@ -7,7 +7,7 @@ url='https://whoozle.github.io/android-file-transfer-linux'
 license=('LGPL 2.1')
 depends=('qt5-base' 'fuse' 'fuse3' 'pybind11' 'libxkbcommon' 'libxkbfile' 'hicolor-icon-theme')
 makedepends=('cmake' 'qt5-tools')
-source=("${pkgname}-${pkgver}.tar.gz::https://github.com/MartinVonReichenberg/android-file-transfer/archive/refs/tags/v${pkgver}.tar.gz")
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/MartinVonReichenberg/android-file-transfer-linux/archive/refs/tags/v${pkgver}.tar.gz")
 sha256sums=('SKIP')
 
 build() {
