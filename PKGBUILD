@@ -1,23 +1,35 @@
 pkgname=android-file-transfer
 _pkgname=android-file-transfer-linux
 pkgver=4.3
-pkgrel=1
-pkgdesc='Android MTP client with a minimalistic UI'
+pkgrel=2
+pkgdesc="A reliable MTP client with a minimalistic UI similar to official Android File Transfer by Google. It just works."
 arch=('x86_64')
-url='https://whoozle.github.io/android-file-transfer-linux'
-license=('LGPL 2.1')
-depends=('qt5-base' 'fuse' 'fuse3' 'pybind11' 'libxkbcommon' 'libxkbfile' 'hicolor-icon-theme')
-makedepends=('cmake' 'qt5-tools')
-source=("${_pkgname}-${pkgver}.tar.gz::https://github.com/MartinVonReichenberg/android-file-transfer-linux/archive/refs/tags/v${pkgver}.tar.gz")
+url="https://whoozle.github.io/android-file-transfer-linux/"
+license=('GPL3')
+depends=('systemd' 'qt6-base' 'file' 'glibc' 'gcc-libs' 'readline' 'fuse'
+         'fuse' 'libxkbcommon'  'hicolor-icon-theme' 'taglib' 'openssl' 'zlib')
+makedepends=('qt6-tools' 'cmake' 'ninja')
+provides=('android-file-transfer' 'aft-mtp-cli' 'aft-mtp-mount')
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/whoozle/${_pkgname}/archive/refs/tags/v${pkgver}.tar.gz")
 sha256sums=('SKIP')
 
+prepare() {
+  mkdir -p "${srcdir}/${_pkgname}-${pkgver}/build/"
+}
+
 build() {
-  cd ${_pkgname}-${pkgver}
-  cmake -DCMAKE_INSTALL_PREFIX=/usr . -DCMAKE_CXX_FLAGS="${CXXFLAGS} -ffat-lto-objects"
-  make
+  cmake -S "${srcdir}/${_pkgname}-${pkgver}/" \
+        -B "${srcdir}/${_pkgname}-${pkgver}/build/" \
+        -G Ninja -DCMAKE_INSTALL_PREFIX="/usr/" \
+        -DCMAKE_CXX_FLAGS="$CXXFLAGS -ffat-lto-objects" \
+        -DCMAKE_EXE_LINKER_FLAGS=-Wl,-O1,--sort-common,-z,relro,-z,now
+
+  ninja -C "${srcdir}/${_pkgname}-${pkgver}/build/" all
 }
 
 package() {
-  cd ${_pkgname}-${pkgver}
-  make DESTDIR="${pkgdir}/" install
+  DESTDIR="${pkgdir}" ninja -C "${srcdir}/${_pkgname}-${pkgver}/build/" install
+
+  install -Dm644 "${srcdir}/${_pkgname}-${pkgver}/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}/"
+  ln -s "/usr/bin/${pkgname}" "${pkgdir}/usr/bin/${_pkgname}"
 }
