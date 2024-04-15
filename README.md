@@ -1,6 +1,6 @@
 # Android File Transfer
 
-### [HOME](https://www.android.com/intl/en_us/filetransfer) | [SOURCE](https://github.com/whoozle/android-file-transfer-linux) | [FORK](https://github.com/MartinVonReichenberg/android-file-transfer-linux)
+### [HOME](https://www.android.com/intl/en_us/filetransfer) | [SOURCE](https://github.com/whoozle/android-file-transfer-linux)
 
 Android File Transfer for Linux — a reliable MTP client with minimalistic UI similar to Android File Transfer.  *"It just works™*.
 
